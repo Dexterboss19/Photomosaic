@@ -27,6 +27,7 @@ Example:
 ```
 python createMosaic.py Photo.jpg 3000 folder_of_tiles 2 1
 ```
+If you want to subdivide the picture more or less or if you want to change it altogether you will need to delete the resized and slices folders and the dataResized.csv and dataSlices.csv files
 
 ## Example
 The photo I want to make an mosaic out of is a photo of Shibes ... because Shibes. The tiles are memes from this meme dataset (https://www.kaggle.com/sayangoswami/reddit-memes-dataset).
