@@ -92,8 +92,6 @@ def ensure_dir(directory):
 def get_size_x_and_size_y_of_resized(path):
     img = Image.open(path + "/" + os.listdir(path)[0])
     width_of_slice, height_of_slice = img.size
-    # print(heightOfSlice)
-    # print(widthOfSlice)
     return width_of_slice, height_of_slice
 
 

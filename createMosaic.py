@@ -16,14 +16,18 @@ imgMosaic = None
 
 
 def main(args):
+    file_name = args[1]
+
+    nr_of_subdivisions = int(args[2])
+
     dir_path = args[3]
     createAssets.dirPath = dir_path
-    file_name = args[1]
-    nr_of_subdivisions = int(args[2])
-    methode = int(args[4])
-    overlayArg = int(args[5])
 
-    if overlayArg == 1:
+    mode = int(args[4])
+
+    overlay_arg = int(args[5])
+
+    if overlay_arg == 1:
         overlay = True
     else:
         overlay = False
@@ -32,10 +36,10 @@ def main(args):
         createAssets.subdivide_photo(file_name, nr_of_subdivisions, slicesPath)
         createAssets.create_data_frame('dataSlices.csv', slicesPath)
 
-    sizeX, sizeY = createAssets.get_size_x_and_size_y_of_slices(slicesPath)
+    size_x, size_y = createAssets.get_size_x_and_size_y_of_slices(slicesPath)
 
     if not createAssets.ensure_dir(resizePath):
-        createAssets.resize_pictures(sizeX, sizeY, dir_path, resizePath)
+        createAssets.resize_pictures(size_x, size_y, dir_path, resizePath)
         createAssets.create_data_frame('dataResized.csv', resizePath)
 
     data_slices = pd.read_csv('dataSlices.csv', sep=",")
@@ -58,32 +62,32 @@ def main(args):
     for _ in range(cols * rows):
         mosaic.append("")
 
-    if methode is 1:
+    if mode is 1:
         calculate_mosaic_euclidean_rep(cols * rows, len(reds_resized), names_resized, reds_resized, greens_resized,
                                        blues_resized, reds_slices, greens_slices, blues_slices)
-        methode_string = 'RGB_Repetition'
-    elif methode is 2:
+        mode_string = 'RGB_Repetition'
+    elif mode is 2:
         calculate_mosaic_euclidean_no_rep(cols * rows, len(reds_resized), names_resized, reds_resized, greens_resized,
                                           blues_resized, reds_slices, greens_slices, blues_slices)
-        methode_string = 'RGB_No_Repetition'
-    elif methode is 3:
+        mode_string = 'RGB_No_Repetition'
+    elif mode is 3:
         calculate_mosaic_lab_rep(cols * rows, len(reds_resized), names_resized, reds_resized, greens_resized,
                                  blues_resized, reds_slices, greens_slices, blues_slices)
-        methode_string = 'CIELAB_Repetition'
+        mode_string = 'CIELAB_Repetition'
     else:
         calculate_mosaic_lab_no_rep(cols * rows, len(reds_resized), names_resized, reds_resized, greens_resized,
                                     blues_resized, reds_slices, greens_slices, blues_slices)
-        methode_string = 'CIELAB_No_Repetition'
+        mode_string = 'CIELAB_No_Repetition'
 
-    name = '{}_{}.jpg'.format(methode_string, (cols * rows))
-    nameOverlay = '{}_{}_Overlay.png'.format(methode_string, (cols * rows))
-    imgMosaic = create_mosaic(name, cols, rows, resizePath)
+    name = '{}_{}.jpg'.format(mode_string, (cols * rows))
+    name_overlay = '{}_{}_Overlay.png'.format(mode_string, (cols * rows))
+    img_mosaic = create_mosaic(name, cols, rows, resizePath)
 
     if overlay:
         img = Image.open(file_name)
         size_x, size_y = img.size
-        img2 = imgMosaic.resize((size_x, size_y), Image.ANTIALIAS)
-        create_overlay(nameOverlay, img2, file_name)
+        img2 = img_mosaic.resize((size_x, size_y), Image.ANTIALIAS)
+        create_overlay(name_overlay, img2, file_name)
 
 
 def calculate_mosaic_euclidean_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r, greens_r, blues_r,
