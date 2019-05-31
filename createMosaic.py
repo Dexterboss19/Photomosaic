@@ -16,18 +16,31 @@ imgMosaic = None
 
 
 def main(args):
-    file_name = args[1]
+    try:
+        file_name = args[1]
+    except:
+        print("\nPlease input a file")
+        quit()
 
-    nr_of_subdivisions = int(args[2])
+    try:
+        nr_of_subdivisions = int(args[2])
+    except:
+        print("\nNumber of subdivisions required")
+        quit()
 
     dir_path = args[3]
     createAssets.dirPath = dir_path
 
-    mode = int(args[4])
+    try:
+        mode = int(args[4])
+        if mode > 4:
+            mode = 0
+    except:
+        mode = 0
 
     overlay_arg = int(args[5])
 
-    if overlay_arg == 1:
+    if overlay_arg >= 1:
         overlay = True
     else:
         overlay = False
@@ -92,6 +105,7 @@ def main(args):
 
 def calculate_mosaic_euclidean_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r, greens_r, blues_r,
                                       reds_s, greens_s, blues_s):
+    """Creates a mosaic using euclidean maths and no repetition"""
     temp = True
 
     print('Calculating mosaic')
@@ -106,8 +120,8 @@ def calculate_mosaic_euclidean_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, r
 
         for j in range(nr_of_tiles):
             if not_used[j]:
-                temp2 = createAssets.color_distance_euclidean(reds_r[j], greens_r[j], blues_r[j],
-                                                              reds_s[i], greens_s[i], blues_s[i])
+                temp2 = createAssets.color_distance_euclidean((reds_r[j], greens_r[j], blues_r[j]),
+                                                              (reds_s[i], greens_s[i], blues_s[i]))
 
                 if temp2 < temp1:
                     temp1 = temp2
@@ -126,6 +140,7 @@ def calculate_mosaic_euclidean_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, r
 
 def calculate_mosaic_lab_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r, greens_r, blues_r,
                                 reds_s, greens_s, blues_s):
+    """Creates a mosaic using the lab space and no repetition"""
     temp = True
     print('Calculating mosaic')
     for i in range(nr_of_subdivisions):
@@ -139,8 +154,8 @@ def calculate_mosaic_lab_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r,
 
         for j in range(nr_of_tiles):
             if not_used[j]:
-                temp2 = createAssets.color_distance_lab(reds_r[j], greens_r[j], blues_r[j],
-                                                        reds_s[i], greens_s[i], blues_s[i])
+                temp2 = createAssets.color_distance_lab((reds_r[j], greens_r[j], blues_r[j]),
+                                                        (reds_s[i], greens_s[i], blues_s[i]))
 
                 if temp2 < temp1:
                     temp1 = temp2
@@ -160,13 +175,14 @@ def calculate_mosaic_lab_no_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r,
 
 def calculate_mosaic_euclidean_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r, greens_r, blues_r,
                                    reds_s, greens_s, blues_s):
+    """Creates a mosaic using euclidean maths and with repetition"""
     print('Calculating mosaic')
     for i in range(nr_of_subdivisions):
         temp1 = 1000
         index = 0
         for j in range(nr_of_tiles):
-            temp2 = createAssets.color_distance_euclidean(reds_r[j], greens_r[j], blues_r[j],
-                                                          reds_s[i], greens_s[i], blues_s[i])
+            temp2 = createAssets.color_distance_euclidean((reds_r[j], greens_r[j], blues_r[j]),
+                                                          (reds_s[i], greens_s[i], blues_s[i]))
 
             if temp2 < temp1:
                 temp1 = temp2
@@ -182,13 +198,14 @@ def calculate_mosaic_euclidean_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds
 
 def calculate_mosaic_lab_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r, greens_r, blues_r,
                              reds_s, greens_s, blues_s):
+    """Creates a mosaic using the lab space and with repetition"""
     print('Calculating mosaic')
     for i in range(nr_of_subdivisions):
         temp1 = 1000
         index = 0
         for j in range(nr_of_tiles):
-            temp2 = createAssets.color_distance_lab(reds_r[j], greens_r[j], blues_r[j],
-                                                    reds_s[i], greens_s[i], blues_s[i])
+            temp2 = createAssets.color_distance_lab((reds_r[j], greens_r[j], blues_r[j]),
+                                                    (reds_s[i], greens_s[i], blues_s[i]))
 
             if temp2 < temp1:
                 temp1 = temp2
@@ -203,6 +220,7 @@ def calculate_mosaic_lab_rep(nr_of_subdivisions, nr_of_tiles, name_r, reds_r, gr
 
 
 def create_mosaic(name, cols, rows, resize_path):
+    """Crates the mosaic"""
     print('Creating mosaic')
 
     new_mosaic = list(createAssets.chunks(mosaic, rows))
@@ -229,6 +247,7 @@ def create_mosaic(name, cols, rows, resize_path):
 
 
 def create_overlay(name, photo1, photo2):
+    """Creats an overlay photo"""
     pil_image = photo1
 
     a = cv2.imread(photo2, cv2.IMREAD_UNCHANGED)

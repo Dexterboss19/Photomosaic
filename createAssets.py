@@ -10,6 +10,7 @@ from colormath.color_diff import delta_e_cie2000
 
 
 def create_data_frame(name, path):
+    """Creates a dataframe with the red, green, blue values and name of the files in a folder"""
     df = pd.DataFrame(columns=["red", "green", "blue", "name"])
 
     reds = []
@@ -35,6 +36,7 @@ def create_data_frame(name, path):
 
 
 def resize_pictures(size_x, size_y, path_to_resize, path_to_save):
+    """Resize the pictures in a folder and saves them in another one"""
     cols, rows = get_cols_and_rows_of_slices('slices')
     temp = int((cols * rows) / 1000)
     new_size_x = size_x * temp
@@ -48,6 +50,7 @@ def resize_pictures(size_x, size_y, path_to_resize, path_to_save):
 
 
 def subdivide_photo(filename, subdivisions, path_to_save):
+    """Slices a photo in a specified number of subdivision"""
     tiles = image_slicer.slice(filename, subdivisions, save=False)
     image_slicer.save_tiles(tiles, directory=path_to_save)
     print('Subdivided in {} slices'.format(subdivisions))
@@ -61,6 +64,7 @@ def chunks(l, n):
 
 
 def get_cols_and_rows_of_slices(path):
+    """Returns the cols and rows of the slices"""
     rows = []
     cols = []
 
@@ -76,12 +80,14 @@ def get_cols_and_rows_of_slices(path):
 
 
 def get_size_x_and_size_y_of_slices(path):
+    """Return the sizes of the slices"""
     img = Image.open(path + "/" + os.listdir(path)[0])
     width_of_slice, height_of_slice = img.size
     return width_of_slice, height_of_slice
 
 
 def ensure_dir(directory):
+    """Makes sure that a directory exists"""
     if os.path.exists(directory):
         return True
     else:
@@ -90,12 +96,14 @@ def ensure_dir(directory):
 
 
 def get_size_x_and_size_y_of_resized(path):
+    """Return the size of the resized photos"""
     img = Image.open(path + "/" + os.listdir(path)[0])
     width_of_slice, height_of_slice = img.size
     return width_of_slice, height_of_slice
 
 
 def compute_average_image_color(path_to_img):
+    """Return the average color of an image"""
     img = Image.open(path_to_img)
     width, height = img.size
 
@@ -115,9 +123,10 @@ def compute_average_image_color(path_to_img):
     return int(r_total / count), int(g_total / count), int(b_total / count)
 
 
-def color_distance_lab(r1, g1, b1, r2, g2, b2):
-    color1_rgb = sRGBColor(r1, g1, b1)
-    color2_rgb = sRGBColor(r2, g2, b2)
+def color_distance_lab(color1, color2):
+    """Transforms a color from sRGB to CIE_LAB color space"""
+    color1_rgb = sRGBColor(*color1)
+    color2_rgb = sRGBColor(*color2)
 
     color1_lab = convert_color(color1_rgb, LabColor)
 
@@ -128,6 +137,9 @@ def color_distance_lab(r1, g1, b1, r2, g2, b2):
     return delta_e
 
 
-def color_distance_euclidean(r1, g1, b1, r2, g2, b2):
+def color_distance_euclidean(color1, color2):
+    """Calculates the euclidean distance between 2 Colors"""
+    r1, g1, b1 = color1
+    r2, g2, b2 = color2
     delta = sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
     return delta
