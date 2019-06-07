@@ -1,5 +1,5 @@
 # Python-Photomosaic
-This is a python script that can produce a photomosaic by dividing the photo into a number of slices than replaicing them with your tiles using euclidian math or cielab space for finding the closes match of colours.
+This is a python script that can produce a photomosaic by dividing the photo into a number of slices than replacing them with your tiles using euclidian math or cielab space for finding the closest match of colors.
 ### Prerequisites
 image_slicer, pandas, numpy, colormath, cv2
 ```
@@ -11,9 +11,9 @@ pip install image_slicer pandas numpy colormath opencv-python
 3. navigate in cmd to the folder with the 2 .py files in it
 4. run the createMosaic.py with the following arguments: photo.jpg number_of_slices folder_of_tiles 1-4* 0-1**
 
-\* 1 for euclidean distance with repetition of tiles (fast, ok results)
+\* 1 for Euclidean distance with repetition of tiles (fast, ok results)
 
-\* 2 for euclidean distance without repetition of tiles (fast, ok result)
+\* 2 for Euclidean distance without repetition of tiles (fast, ok result)
 
 \* 3 for cielab distance with repetition of tiles (slow, best result)
 
@@ -21,8 +21,7 @@ pip install image_slicer pandas numpy colormath opencv-python
 
 ** 1 will make the normal mosaic and one with the normal picture as an overlay
 
-** 0 will not make the overlay
-
+** 0 will not make the overlay  
 Example:
 ```
 python createMosaic.py Photo.jpg 3000 folder_of_tiles 2 1
@@ -30,9 +29,9 @@ python createMosaic.py Photo.jpg 3000 folder_of_tiles 2 1
 If you want to subdivide the picture more or less or if you want to change it altogether you will need to delete the resized and slices folders and the dataResized.csv and dataSlices.csv files
 
 ## Example
-The photo I want to make an mosaic out of is a photo of Shibes ... because Shibes. The tiles are memes from this meme dataset (https://www.kaggle.com/sayangoswami/reddit-memes-dataset).
+The photo I want to make a mosaic out of is a photo of Shibes ... because Shibes. The tiles are memes from this meme dataset (https://www.kaggle.com/sayangoswami/reddit-memes-dataset).
 
-The photo is 700 x 700 pixels and will be divided in 3000 slices. The dataset has 3326 tiles (here memes) so it should not repeat them if not specified.
+The photo is 700 x 700 pixels and will be divided into 3000 slices. The dataset has 3326 tiles (here memes) so it should not repeat them if not specified.
 
 ![](Photos/Normal.jpeg)
 
